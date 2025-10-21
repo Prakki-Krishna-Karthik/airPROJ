@@ -1157,54 +1157,64 @@
         }
 
         function showDisplayData() {
-            dataEntryForm.classList.add('d-none');
-            displayDataTable.classList.remove('d-none');
-            
-            const register = registers.find(r => r.id === currentRegisterId);
-            
-            if (!register || register.entries.length === 0) {
-                registerDataBody.innerHTML = '';
-                noDataMessage.classList.remove('d-none');
-                return;
-            }
-            
-            noDataMessage.classList.add('d-none');
-            registerDataBody.innerHTML = '';
-            
-            register.entries.forEach((entry, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${new Date(entry.date).toLocaleDateString()}</td>
-                    <td>${entry.item}</td>
-                    <td>${entry.description}</td>
-                    <td class="action-buttons">
-                        <button class="btn btn-sm btn-outline-primary edit-entry-btn" data-index="${index}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger delete-entry-btn" data-index="${index}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                
-                registerDataBody.appendChild(row);
+    dataEntryForm.classList.add('d-none');
+    displayDataTable.classList.remove('d-none');
+    
+    const register = registers.find(r => r.id === currentRegisterId);
+    
+    if (!register || register.entries.length === 0) {
+        registerDataBody.innerHTML = '';
+        noDataMessage.classList.remove('d-none');
+        return;
+    }
+    
+    noDataMessage.classList.add('d-none');
+    registerDataBody.innerHTML = '';
+    
+    register.entries.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        
+        // Only show action buttons for admin users
+        const actionButtons = currentRole === 'admin' 
+            ? `
+                <td class="action-buttons">
+                    <button class="btn btn-sm btn-outline-primary edit-entry-btn" data-index="${index}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-entry-btn" data-index="${index}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `
+            : `<td class="text-muted">View Only</td>`;
+        
+        row.innerHTML = `
+            <td>${new Date(entry.date).toLocaleDateString()}</td>
+            <td>${entry.item}</td>
+            <td>${entry.description}</td>
+            ${actionButtons}
+        `;
+        
+        registerDataBody.appendChild(row);
+    });
+    
+    // Only add event listeners for admin users
+    if (currentRole === 'admin') {
+        document.querySelectorAll('.edit-entry-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const entryIndex = this.getAttribute('data-index');
+                editEntry(entryIndex);
             });
-            
-            // Add event listeners to action buttons
-            document.querySelectorAll('.edit-entry-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const entryIndex = this.getAttribute('data-index');
-                    editEntry(entryIndex);
-                });
+        });
+        
+        document.querySelectorAll('.delete-entry-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const entryIndex = this.getAttribute('data-index');
+                deleteEntry(entryIndex);
             });
-            
-            document.querySelectorAll('.delete-entry-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const entryIndex = this.getAttribute('data-index');
-                    deleteEntry(entryIndex);
-                });
-            });
-        }
+        });
+    }
+}
 
         function showDataEntry() {
             displayDataTable.classList.add('d-none');
