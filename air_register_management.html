@@ -293,7 +293,11 @@
             border-radius: 10px;
             text-align: center;
         }
-        
+        .saving {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
         .logout-btn {
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
@@ -311,6 +315,15 @@
         .role-restricted {
             opacity: 0.6;
             pointer-events: none;
+        }
+        
+        .edit-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            color: #856404;
         }
     </style>
 </head>
@@ -330,7 +343,6 @@
                         <div class="card-header text-center">
                             <i class="fas fa-user-shield fa-2x mb-2"></i>
                             <h4>Admin Login</h4>
-                            
                         </div>
                         <div class="card-body">
                             <form id="admin-login-form">
@@ -357,7 +369,6 @@
                         <div class="card-header text-center">
                             <i class="fas fa-user fa-2x mb-2"></i>
                             <h4>User Login</h4>
-                            
                         </div>
                         <div class="card-body">
                             <form id="user-login-form">
@@ -397,7 +408,7 @@
             <div class="container">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <img src="airLogo.png" alt="AIR Logo" class="air-logo">
+                        <img src="airLogo.png" alt="AIR Logo" class="air-logo mb-3">
                         <div>
                             <h1 class="air-title">All India Radio Hyderabad</h1>
                             <p class="air-subtitle">Register Management System</p>
@@ -443,7 +454,7 @@
                                         <i class="fas fa-trash-alt me-2"></i>Delete Register
                                     </a>
                                 </li>
-                                <li class="nav-item" id="data-management-nav">
+                                <li class="nav-item">
                                     <a class="nav-link" href="#" id="data-management-tab">
                                         <i class="fas fa-database me-2"></i>Data Management
                                     </a>
@@ -540,7 +551,6 @@
                     <div class="card d-none" id="data-management-section">
                         <div class="card-header">
                             <i class="fas fa-database me-2"></i>Data Management
-                            <span id="admin-only-badge" class="admin-badge ms-2">Admin Only</span>
                         </div>
                         <div class="card-body">
                             <!-- Admin Access Content -->
@@ -604,55 +614,6 @@
                                                 <div id="qrcode-container" class="mt-3 text-center"></div>
                                             </div>
                                         </div>
-
-                                        <!-- Import from Link -->
-                                        <div class="sharing-section mt-4">
-                                            <h4><i class="fas fa-download me-2"></i>Import from Link</h4>
-                                            <p>Paste a shareable link to import data directly:</p>
-                                            <div class="input-group mb-3">
-                                                <input type="text" class="form-control" id="import-link" placeholder="Paste shareable link here">
-                                                <button class="btn btn-warning" onclick="importFromLink()">
-                                                    <i class="fas fa-cloud-download-alt me-2"></i>Import Data
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Share via Code -->
-                                        <div class="sharing-section mt-4">
-                                            <h4><i class="fas fa-code me-2"></i>Share via Code</h4>
-                                            <p class="mb-2">Generate a code that can be shared via message or email:</p>
-                                            <div class="share-instruction">
-                                                <i class="fas fa-info-circle me-1"></i>
-                                                <strong>Note:</strong> Share codes work across all devices and browsers.
-                                            </div>
-                                            <button class="btn btn-light mb-3" onclick="generateShareCode()">
-                                                <i class="fas fa-key me-2"></i>Generate Share Code
-                                            </button>
-                                            <div id="share-code-container" class="d-none">
-                                                <div class="data-url-box mb-3">
-                                                    <strong>Share this code:</strong><br>
-                                                    <span id="share-code" class="text-white"></span>
-                                                </div>
-                                                <div class="share-instruction">
-                                                    <i class="fas fa-lightbulb me-1"></i>
-                                                    <strong>Tip:</strong> The recipient should paste this exact code in the "Import from Code" field below.
-                                                </div>
-                                                <button class="btn btn-success me-2" onclick="copyShareCode()">
-                                                    <i class="fas fa-copy me-2"></i>Copy Code
-                                                </button>
-                                            </div>
-
-                                            <div class="mt-4">
-                                                <p>Import using a shared code:</p>
-                                                <div class="input-group mb-3">
-                                                    <input type="text" class="form-control" id="import-code" placeholder="Paste the exact share code here">
-                                                    <button class="btn btn-warning" onclick="importFromCode()">
-                                                        <i class="fas fa-download me-2"></i>Import from Code
-                                                    </button>
-                                                </div>
-                                                <small class="text-muted">Paste the code exactly as it was shared with you</small>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 
@@ -677,16 +638,23 @@
                                 </div>
                             </div>
 
-                            <!-- User Access Restricted Message -->
-                            <div id="user-restricted-message" class="d-none">
-                                <div class="access-restricted">
-                                    <i class="fas fa-lock fa-4x mb-3"></i>
-                                    <h3>Access Restricted</h3>
-                                    <p>Data management features are only available to administrators.</p>
-                                    <p>Please contact your system administrator for data export/import operations.</p>
-                                    <button class="btn btn-light mt-3" onclick="switchSection('display')">
-                                        <i class="fas fa-arrow-left me-2"></i>Back to Registers
-                                    </button>
+                            <!-- User Access Content -->
+                            <div id="user-data-management" class="d-none">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    You can import data using a shareable link provided by an administrator.
+                                </div>
+                                
+                                <!-- Import from Link -->
+                                <div class="sharing-section">
+                                    <h4><i class="fas fa-download me-2"></i>Import from Link</h4>
+                                    <p>Paste a shareable link to import data directly:</p>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="user-import-link" placeholder="Paste shareable link here">
+                                        <button class="btn btn-warning" onclick="importFromLink()">
+                                            <i class="fas fa-cloud-download-alt me-2"></i>Import Data
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -732,6 +700,10 @@
                         <!-- Data Entry Form -->
                         <div id="data-entry-form" class="d-none">
                             <h5>Add New Entry</h5>
+                            <div class="edit-warning d-none" id="edit-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                You are editing an existing entry. You must click "Save Entry" to save your changes.
+                            </div>
                             <form id="new-entry-form">
                                 <div class="row mb-3">
                                     <div class="col-md-6">
@@ -748,6 +720,7 @@
                                     <textarea class="form-control" id="entry-description" rows="3" placeholder="Enter description" required></textarea>
                                 </div>
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <p class="saving">Click "Save Entry" to save your changes</p>
                                     <button type="submit" class="btn btn-air">
                                         <i class="fas fa-save me-2"></i>Save Entry
                                     </button>
@@ -793,6 +766,7 @@
         let currentRole = null;
         let registers = JSON.parse(localStorage.getItem('airRegisters')) || [];
         let currentRegisterId = null;
+        let isEditingEntry = false;
 
         // DOM Elements
         const loginSection = document.getElementById('login-section');
@@ -802,9 +776,8 @@
         const roleDescription = document.getElementById('role-description');
         const footerRoleText = document.getElementById('footer-role-text');
         const adminDataManagement = document.getElementById('admin-data-management');
-        const userRestrictedMessage = document.getElementById('user-restricted-message');
+        const userDataManagement = document.getElementById('user-data-management');
         const deleteRegisterNav = document.getElementById('delete-register-nav');
-        const dataManagementNav = document.getElementById('data-management-nav');
 
         // Application sections
         const createRegisterSection = document.getElementById('create-register-section');
@@ -832,6 +805,7 @@
         const newEntryForm = document.getElementById('new-entry-form');
         const registerDataBody = document.getElementById('register-data-body');
         const noDataMessage = document.getElementById('no-data-message');
+        const editWarning = document.getElementById('edit-warning');
 
         // Data Management Elements
         const exportDataBtn = document.getElementById('export-data-btn');
@@ -875,10 +849,12 @@
                     userRoleBadge.className = 'ms-2 admin-badge';
                     userRoleBadge.textContent = 'Admin';
                     roleDescription.textContent = 'Full system access: Create, view, delete registers, and manage data exports/imports.';
+                    deleteRegisterNav.classList.remove('d-none');
                 } else {
                     userRoleBadge.className = 'ms-2 user-badge';
                     userRoleBadge.textContent = 'User';
-                    roleDescription.textContent = 'Limited access: Create and view registers only. Data management restricted.';
+                    roleDescription.textContent = 'Limited access: Create and view registers only. Data management restricted to import via links.';
+                    deleteRegisterNav.classList.add('d-none');
                 }
                 
                 // Show main application
@@ -900,22 +876,15 @@
             mainApplication.classList.add('d-none');
             loginSection.classList.remove('d-none');
             
+            // Reset all sections to default state
+            switchSection('create');
+            
             // Clear login forms
             document.getElementById('admin-login-form').reset();
             document.getElementById('user-login-form').reset();
         }
 
         function initializeApplication() {
-            // Set up role-based UI
-            if (currentRole === 'user') {
-                // Hide restricted features from sidebar
-                deleteRegisterNav.classList.add('d-none');
-                dataManagementNav.classList.add('d-none');
-            } else {
-                deleteRegisterNav.classList.remove('d-none');
-                dataManagementNav.classList.remove('d-none');
-            }
-            
             // Load initial data
             loadRegisters();
             loadDeleteRegisters();
@@ -954,14 +923,6 @@
             return true;
         }
 
-        function checkUserAccess() {
-            if (currentRole !== 'user') {
-                return true;
-            }
-            alert('This feature is not available for user accounts.');
-            return false;
-        }
-
         // Section switching
         function switchSection(section) {
             // Update active tab
@@ -993,17 +954,17 @@
                 deleteRegisterSection.classList.remove('d-none');
                 loadDeleteRegisters();
             } else if (section === 'data-management') {
+                dataManagementTab.classList.add('active');
+                dataManagementSection.classList.remove('d-none');
+                
+                // Show appropriate content based on role
                 if (currentRole === 'admin') {
-                    dataManagementTab.classList.add('active');
-                    dataManagementSection.classList.remove('d-none');
                     adminDataManagement.classList.remove('d-none');
-                    userRestrictedMessage.classList.add('d-none');
+                    userDataManagement.classList.add('d-none');
                     updateBackupInfo();
                 } else {
-                    dataManagementTab.classList.add('active');
-                    dataManagementSection.classList.remove('d-none');
                     adminDataManagement.classList.add('d-none');
-                    userRestrictedMessage.classList.remove('d-none');
+                    userDataManagement.classList.remove('d-none');
                 }
             }
         }
@@ -1154,67 +1115,69 @@
             // Reset modal state
             dataEntryForm.classList.add('d-none');
             displayDataTable.classList.add('d-none');
+            editWarning.classList.add('d-none');
+            isEditingEntry = false;
         }
 
         function showDisplayData() {
-    dataEntryForm.classList.add('d-none');
-    displayDataTable.classList.remove('d-none');
-    
-    const register = registers.find(r => r.id === currentRegisterId);
-    
-    if (!register || register.entries.length === 0) {
-        registerDataBody.innerHTML = '';
-        noDataMessage.classList.remove('d-none');
-        return;
-    }
-    
-    noDataMessage.classList.add('d-none');
-    registerDataBody.innerHTML = '';
-    
-    register.entries.forEach((entry, index) => {
-        const row = document.createElement('tr');
-        
-        // Only show action buttons for admin users
-        const actionButtons = currentRole === 'admin' 
-            ? `
-                <td class="action-buttons">
-                    <button class="btn btn-sm btn-outline-primary edit-entry-btn" data-index="${index}">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger delete-entry-btn" data-index="${index}">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            `
-            : `<td class="text-muted">View Only</td>`;
-        
-        row.innerHTML = `
-            <td>${new Date(entry.date).toLocaleDateString()}</td>
-            <td>${entry.item}</td>
-            <td>${entry.description}</td>
-            ${actionButtons}
-        `;
-        
-        registerDataBody.appendChild(row);
-    });
-    
-    // Only add event listeners for admin users
-    if (currentRole === 'admin') {
-        document.querySelectorAll('.edit-entry-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const entryIndex = this.getAttribute('data-index');
-                editEntry(entryIndex);
+            dataEntryForm.classList.add('d-none');
+            displayDataTable.classList.remove('d-none');
+            
+            const register = registers.find(r => r.id === currentRegisterId);
+            
+            if (!register || register.entries.length === 0) {
+                registerDataBody.innerHTML = '';
+                noDataMessage.classList.remove('d-none');
+                return;
+            }
+            
+            noDataMessage.classList.add('d-none');
+            registerDataBody.innerHTML = '';
+            
+            register.entries.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                
+                // Only show action buttons for admin users
+                const actionButtons = currentRole === 'admin' 
+                    ? `
+                        <td class="action-buttons">
+                            <button class="btn btn-sm btn-outline-primary edit-entry-btn" data-index="${index}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-entry-btn" data-index="${index}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `
+                    : `<td class="text-muted">View Only</td>`;
+                
+                row.innerHTML = `
+                    <td>${new Date(entry.date).toLocaleDateString()}</td>
+                    <td>${entry.item}</td>
+                    <td>${entry.description}</td>
+                    ${actionButtons}
+                `;
+                
+                registerDataBody.appendChild(row);
             });
-        });
-        
-        document.querySelectorAll('.delete-entry-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const entryIndex = this.getAttribute('data-index');
-                deleteEntry(entryIndex);
-            });
-        });
-    }
-}
+            
+            // Only add event listeners for admin users
+            if (currentRole === 'admin') {
+                document.querySelectorAll('.edit-entry-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const entryIndex = this.getAttribute('data-index');
+                        editEntry(entryIndex);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-entry-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const entryIndex = this.getAttribute('data-index');
+                        deleteEntry(entryIndex);
+                    });
+                });
+            }
+        }
 
         function showDataEntry() {
             displayDataTable.classList.add('d-none');
@@ -1245,8 +1208,12 @@
                 saveRegisters();
                 newEntryForm.reset();
                 
+                // Reset editing state
+                isEditingEntry = false;
+                editWarning.classList.add('d-none');
+                
                 // Show success message
-                alert('Entry added successfully!');
+                alert('Entry saved successfully!');
                 
                 // Switch to display data
                 showDisplayData();
@@ -1259,12 +1226,16 @@
             if (register && register.entries[entryIndex]) {
                 const entry = register.entries[entryIndex];
                 
+                // Show warning message
+                editWarning.classList.remove('d-none');
+                isEditingEntry = true;
+                
                 // Populate form with entry data
                 document.getElementById('entry-date').value = entry.date;
                 document.getElementById('entry-item').value = entry.item;
                 document.getElementById('entry-description').value = entry.description;
                 
-                // Remove the entry
+                // Remove the entry (will be re-added when saved)
                 register.entries.splice(entryIndex, 1);
                 saveRegisters();
                 
@@ -1373,7 +1344,7 @@
             }
         }
 
-        // Direct Sharing Functions (Admin only)
+        // Direct Sharing Functions
         function generateShareLink() {
             if (!checkAdminAccess()) return;
             
@@ -1420,7 +1391,10 @@
         }
 
         function importFromLink() {
-            const link = document.getElementById('import-link').value.trim();
+            const link = currentRole === 'admin' 
+                ? document.getElementById('import-link').value.trim()
+                : document.getElementById('user-import-link').value.trim();
+                
             if (!link) {
                 alert('Please enter a shareable link');
                 return;
@@ -1462,75 +1436,6 @@
             }
         }
 
-        function generateShareCode() {
-            if (!checkAdminAccess()) return;
-            
-            const registers = JSON.parse(localStorage.getItem('airRegisters')) || [];
-            if (registers.length === 0) {
-                alert('No data to share! Please create some registers first.');
-                return;
-            }
-
-            try {
-                // Convert data to base64
-                const dataStr = JSON.stringify(registers);
-                const base64Data = btoa(unescape(encodeURIComponent(dataStr)));
-                
-                // Create a self-contained share code with ALL the data
-                const shareCode = `AIR_DATA_${base64Data}`;
-                
-                document.getElementById('share-code').textContent = shareCode;
-                document.getElementById('share-code-container').classList.remove('d-none');
-                
-                alert('Share code generated! This code contains all your data and can be used on any device.');
-                
-            } catch (error) {
-                alert('Error generating share code: ' + error.message);
-            }
-        }
-
-        function copyShareCode() {
-            const code = document.getElementById('share-code').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                alert('Code copied to clipboard! Share this code with others.\n\nImportant: The recipient must paste this exact code in the "Import from Code" field.');
-            });
-        }
-
-        function importFromCode() {
-            const code = document.getElementById('import-code').value.trim();
-            if (!code) {
-                alert('Please enter a share code');
-                return;
-            }
-
-            try {
-                // Extract the base64 data from the share code
-                if (!code.startsWith('AIR_DATA_')) {
-                    throw new Error('Invalid share code format. Code should start with AIR_DATA_');
-                }
-                
-                const base64Data = code.substring(9); // Remove "AIR_DATA_" prefix
-                
-                if (!base64Data) {
-                    throw new Error('No data found in share code');
-                }
-
-                // Decode data
-                const dataStr = decodeURIComponent(escape(atob(base64Data)));
-                const registers = JSON.parse(dataStr);
-                
-                if (confirm(`This will import ${registers.length} registers with ${registers.reduce((acc, reg) => acc + reg.entries.length, 0)} entries. Continue?`)) {
-                    localStorage.setItem('airRegisters', JSON.stringify(registers));
-                    alert('Data imported successfully!');
-                    window.location.reload();
-                }
-                
-            } catch (error) {
-                alert('Error importing data: ' + error.message + '\n\nPlease make sure you have a valid share code.');
-                console.error('Import error:', error);
-            }
-        }
-
         // Auto-detect and import data from URL on page load
         function checkForSharedData() {
             if (window.location.hash.includes('data=')) {
@@ -1558,7 +1463,7 @@
 
         // Initialize help button
         document.getElementById('help-btn').addEventListener('click', function() {
-            alert(`Role-Based Access Guide:\n\nADMIN: Full system access including data export/import and sharing\nUSER: Can only create and view registers\n\nDefault Credentials:\nAdmin: admin / admin123\nUser: user / user123`);
+            alert(`Role-Based Access Guide:\n\nADMIN: Full system access including data export/import and sharing\nUSER: Can create and view registers, and import data via links\n\nDefault Credentials:\nAdmin: admin / admin123\nUser: user / user123`);
         });
     </script>
 </body>
